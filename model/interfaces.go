@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"mime/multipart"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -25,11 +26,11 @@ type HabitRepository interface {
 
 type UserService interface {
 	Get(uid uuid.UUID) (*User, error)
+	UpdateDetails(u *User) error
 
 	Signup(u *User) error
 	Signin(u *User) error
 
-	UpdateDetails(u *User) error
 	AddHabit(u *User, h Habit) error
 	CheckInHabit(u User, h Habit) error
 
@@ -45,9 +46,28 @@ type UserRepository interface {
 	Update(u *User) error
 
 	UpdateImage(uid uuid.UUID, imageURL string) (*User, error)
+	AddPoints(u *User, p Points) error
 }
 
 type NotificationService interface {
 	Get(u User) ([]Notification, error)
 	Save(u User, n Notification) error
+}
+
+type NotificationRepository interface {
+	Get(u User) ([]Notification, error)
+	Save(u User, n Notification) error
+}
+
+type TokenRepository interface {
+	SetRefreshToken(userID string, tokenID string, expiresIn time.Duration) error
+	DeleteRefreshToken(userID string, prevTokenID string) error
+	DeleteUserRefreshTokens(userID string) error
+}
+
+type TokenService interface {
+	NewPairFromUser(u *User, prevTokenID string) (*TokenPair, error)
+	Signout(uid uuid.UUID) error
+	ValidateIDToken(tokenString string) (*User, error)
+	ValidateRefreshToken(refreshTokenString string) (*RefreshToken, error)
 }

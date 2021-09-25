@@ -8,4 +8,5 @@ type User struct {
 	ID     uuid.UUID
 	Name   string
 	Habits []Habit
+	Points int
 }

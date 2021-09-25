@@ -1,7 +1,6 @@
 package model
 
 import (
-	"context"
 	"mime/multipart"
 	"time"
 
@@ -9,8 +8,8 @@ import (
 )
 
 type ImageRepository interface {
-	DeleteProfile(ctx context.Context, objName string) error
-	UpdateProfile(ctx context.Context, objName string, imageFile multipart.File) (string, error)
+	DeleteProfile(objName string) error
+	UpdateProfile(objName string, imageFile multipart.File) (string, error)
 }
 
 type HabitService interface {
